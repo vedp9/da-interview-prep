@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DA Interview Prep — Master Prompt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root,[data-theme="light"]{
+      --color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;
+      --color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;
+      --color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;
+      --color-primary:#01696f;--color-primary-hover:#0c4e54;
+      --color-primary-highlight:#cedcd8;
+      --color-accent:#437a22;--color-warn:#964219;
+      --shadow-sm:0 1px 2px oklch(0.2 0.01 80/0.06);
+      --shadow-md:0 4px 12px oklch(0.2 0.01 80/0.08);
+      --shadow-lg:0 12px 32px oklch(0.2 0.01 80/0.12);
+      --radius-sm:0.375rem;--radius-md:0.5rem;--radius-lg:0.75rem;--radius-xl:1rem;
+      --font-body:'Inter',sans-serif;--font-mono:'JetBrains Mono',monospace;
+      --text-xs:clamp(0.75rem,0.7rem+0.25vw,0.875rem);
+      --text-sm:clamp(0.875rem,0.8rem+0.35vw,1rem);
+      --text-base:clamp(1rem,0.95rem+0.25vw,1.125rem);
+      --text-lg:clamp(1.125rem,1rem+0.75vw,1.5rem);
+      --text-xl:clamp(1.5rem,1.2rem+1.25vw,2.25rem);
+      --text-2xl:clamp(2rem,1.2rem+2.5vw,3.5rem);
+      --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;
+      --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+      --space-12:3rem;--space-16:4rem;--space-20:5rem;
+      --transition:180ms cubic-bezier(0.16,1,0.3,1);
+    }
+    [data-theme="dark"]{
+      --color-bg:#171614;--color-surface:#1c1b19;--color-surface-2:#201f1d;
+      --color-surface-offset:#22211f;--color-border:#393836;--color-divider:#262523;
+      --color-text:#cdccca;--color-text-muted:#797876;--color-text-faint:#5a5957;
+      --color-primary:#4f98a3;--color-primary-hover:#227f8b;
+      --color-primary-highlight:#313b3b;
+      --color-accent:#6daa45;--color-warn:#bb653b;
+      --shadow-sm:0 1px 2px oklch(0 0 0/0.2);
+      --shadow-md:0 4px 12px oklch(0 0 0/0.3);
+      --shadow-lg:0 12px 32px oklch(0 0 0/0.4);
+    }
+    @media(prefers-color-scheme:light){:root:not([data-theme]){--color-bg:#f7f6f2;--color-surface:#f9f8f5;--color-surface-2:#fbfbf9;--color-surface-offset:#f3f0ec;--color-border:#d4d1ca;--color-divider:#dcd9d5;--color-text:#28251d;--color-text-muted:#7a7974;--color-text-faint:#bab9b4;--color-primary:#01696f;--color-primary-hover:#0c4e54;--color-primary-highlight:#cedcd8;--color-accent:#437a22;--color-warn:#964219;}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;scroll-padding-top:80px;}
+    body{min-height:100dvh;font-family:var(--font-body);font-size:var(--text-base);color:var(--color-text);background:var(--color-bg);line-height:1.6;transition:background var(--transition),color var(--transition);}
+    img,svg{display:block;max-width:100%;}
+    button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;transition:all var(--transition);}
+    a{color:var(--color-primary);text-decoration:none;transition:color var(--transition);}
+    a:hover{color:var(--color-primary-hover);}
+    :focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--radius-sm);}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+    /* ── HEADER ── */
+    .header{
+      position:sticky;top:0;z-index:100;
+      background:oklch(from var(--color-bg) l c h/0.85);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--color-divider);
+      padding:var(--space-4) var(--space-6);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .header-logo{display:flex;align-items:center;gap:var(--space-3);}
+    .logo-icon{width:36px;height:36px;flex-shrink:0;}
+    .logo-text{font-size:var(--text-sm);font-weight:600;letter-spacing:-.01em;}
+    .logo-sub{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:1px;}
+    .header-actions{display:flex;align-items:center;gap:var(--space-3);}
+    .btn-icon{
+      width:36px;height:36px;border-radius:var(--radius-md);
+      display:flex;align-items:center;justify-content:center;
+      background:var(--color-surface);border:1px solid var(--color-border);
+      color:var(--color-text-muted);
+    }
+    .btn-icon:hover{background:var(--color-surface-2);color:var(--color-text);box-shadow:var(--shadow-sm);}
+    .btn-copy-header{
+      display:flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-2) var(--space-4);
+      background:var(--color-primary);color:#fff;
+      border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;
+    }
+    .btn-copy-header:hover{background:var(--color-primary-hover);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+    .btn-copy-header:active{transform:translateY(0);}
+
+    /* ── HERO ── */
+    .hero{
+      max-width:860px;margin:0 auto;
+      padding:var(--space-16) var(--space-6) var(--space-10);
+      text-align:center;
+    }
+    .hero-badge{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      background:var(--color-primary-highlight);color:var(--color-primary);
+      border:1px solid oklch(from var(--color-primary) l c h/0.25);
+      padding:var(--space-1) var(--space-3);border-radius:var(--radius-full);
+      font-size:var(--text-xs);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+      margin-bottom:var(--space-5);
+    }
+    .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--color-primary);animation:pulse 2s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(0.85);}}
+    .hero h1{
+      font-size:var(--text-2xl);font-weight:700;line-height:1.1;
+      letter-spacing:-.03em;margin-bottom:var(--space-4);
+    }
+    .hero h1 span{color:var(--color-primary);}
+    .hero-desc{font-size:var(--text-base);color:var(--color-text-muted);max-width:60ch;margin:0 auto var(--space-8);line-height:1.7;}
+    .hero-cta-row{display:flex;align-items:center;justify-content:center;gap:var(--space-3);flex-wrap:wrap;}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-3) var(--space-6);
+      background:var(--color-primary);color:#fff;
+      border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:600;
+      box-shadow:var(--shadow-md);
+    }
+    .btn-primary:hover{background:var(--color-primary-hover);transform:translateY(-2px);box-shadow:var(--shadow-lg);color:#fff;}
+    .btn-primary:active{transform:translateY(0);}
+    .btn-secondary{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-3) var(--space-6);
+      background:var(--color-surface);color:var(--color-text);
+      border:1px solid var(--color-border);
+      border-radius:var(--radius-lg);font-size:var(--text-sm);font-weight:500;
+    }
+    .btn-secondary:hover{background:var(--color-surface-2);box-shadow:var(--shadow-sm);color:var(--color-text);}
+
+    /* ── WHAT TO EXPECT ── */
+    .section{max-width:900px;margin:0 auto;padding:var(--space-10) var(--space-6);}
+    .section-label{
+      font-size:var(--text-xs);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--color-primary);margin-bottom:var(--space-3);
+    }
+    .section-title{font-size:var(--text-xl);font-weight:700;letter-spacing:-.02em;margin-bottom:var(--space-2);line-height:1.15;}
+    .section-desc{font-size:var(--text-sm);color:var(--color-text-muted);max-width:65ch;margin-bottom:var(--space-8);line-height:1.7;}
+    .divider{border:none;border-top:1px solid var(--color-divider);margin:0 var(--space-6);}
+
+    .expect-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:var(--space-4);}
+    .expect-card{
+      background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius-xl);padding:var(--space-5);
+      box-shadow:var(--shadow-sm);
+      transition:transform var(--transition),box-shadow var(--transition);
+    }
+    .expect-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+    .expect-icon{
+      width:40px;height:40px;border-radius:var(--radius-md);
+      background:var(--color-primary-highlight);
+      display:flex;align-items:center;justify-content:center;
+      margin-bottom:var(--space-3);color:var(--color-primary);font-size:1.2rem;
+    }
+    .expect-card h3{font-size:var(--text-sm);font-weight:600;margin-bottom:var(--space-1);}
+    .expect-card p{font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.6;}
+
+    /* ── ROUNDS ── */
+    .rounds-list{display:flex;flex-direction:column;gap:var(--space-3);}
+    .round-item{
+      background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);
+      display:flex;align-items:flex-start;gap:var(--space-4);
+      box-shadow:var(--shadow-sm);
+    }
+    .round-number{
+      width:32px;height:32px;border-radius:var(--radius-md);
+      background:var(--color-primary-highlight);color:var(--color-primary);
+      display:flex;align-items:center;justify-content:center;
+      font-size:var(--text-xs);font-weight:700;flex-shrink:0;
+    }
+    .round-content{flex:1;}
+    .round-content h3{font-size:var(--text-sm);font-weight:600;margin-bottom:var(--space-1);}
+    .round-content p{font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.6;}
+    .round-tag{
+      display:inline-block;margin-top:var(--space-2);
+      background:var(--color-surface-offset);color:var(--color-text-muted);
+      padding:2px var(--space-2);border-radius:var(--radius-sm);
+      font-size:var(--text-xs);font-weight:500;
+    }
+    .round-tag.optional{background:oklch(from var(--color-accent) l c h/0.15);color:var(--color-accent);}
+
+    /* ── PROMPT BLOCK ── */
+    .prompt-section{max-width:900px;margin:0 auto;padding:var(--space-10) var(--space-6);}
+    .prompt-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3);
+    }
+    .prompt-title-wrap{}
+    .prompt-title-wrap .section-label{margin-bottom:var(--space-1);}
+    .prompt-title-wrap h2{font-size:var(--text-lg);font-weight:700;}
+    .copy-btn-group{display:flex;gap:var(--space-2);}
+    .btn-copy{
+      display:inline-flex;align-items:center;gap:var(--space-2);
+      padding:var(--space-2) var(--space-4);
+      background:var(--color-primary);color:#fff;
+      border-radius:var(--radius-md);font-size:var(--text-sm);font-weight:500;
+    }
+    .btn-copy:hover{background:var(--color-primary-hover);box-shadow:var(--shadow-md);color:#fff;}
+    .btn-copy.copied{background:var(--color-accent);}
+    .prompt-box{
+      background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-md);
+    }
+    .prompt-toolbar{
+      background:var(--color-surface-2);border-bottom:1px solid var(--color-divider);
+      padding:var(--space-3) var(--space-4);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .prompt-toolbar-dots{display:flex;gap:6px;}
+    .dot{width:12px;height:12px;border-radius:50%;}
+    .dot-red{background:#ff5f57;}.dot-yellow{background:#febc2e;}.dot-green{background:#28c840;}
+    .prompt-label{font-size:var(--text-xs);color:var(--color-text-muted);font-family:var(--font-mono);}
+    .prompt-text{
+      padding:var(--space-6);font-family:var(--font-mono);font-size:clamp(.7rem,.65rem+.25vw,.8rem);
+      line-height:1.75;color:var(--color-text);white-space:pre-wrap;word-break:break-word;
+      max-height:520px;overflow-y:auto;
+    }
+    .prompt-text::-webkit-scrollbar{width:6px;}
+    .prompt-text::-webkit-scrollbar-track{background:transparent;}
+    .prompt-text::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:3px;}
+
+    /* ── HOW TO USE ── */
+    .steps-list{display:flex;flex-direction:column;gap:var(--space-4);counter-reset:steps;}
+    .step-item{
+      display:flex;gap:var(--space-4);align-items:flex-start;
+      background:var(--color-surface);border:1px solid var(--color-border);
+      border-radius:var(--radius-lg);padding:var(--space-4) var(--space-5);
+      box-shadow:var(--shadow-sm);
+    }
+    .step-num{
+      width:32px;height:32px;border-radius:var(--radius-md);
+      background:var(--color-primary);color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-size:var(--text-xs);font-weight:700;flex-shrink:0;
+    }
+    .step-item h3{font-size:var(--text-sm);font-weight:600;margin-bottom:var(--space-1);}
+    .step-item p{font-size:var(--text-xs);color:var(--color-text-muted);line-height:1.7;}
+    code{font-family:var(--font-mono);font-size:.9em;background:var(--color-surface-offset);padding:1px 5px;border-radius:var(--radius-sm);color:var(--color-primary);}
+
+    /* ── FOOTER ── */
+    .footer{
+      text-align:center;padding:var(--space-10) var(--space-6);
+      border-top:1px solid var(--color-divider);
+      color:var(--color-text-muted);font-size:var(--text-xs);
+    }
+    .footer a{color:var(--color-primary);}
+
+    /* ── TOAST ── */
+    .toast{
+      position:fixed;bottom:var(--space-6);left:50%;transform:translateX(-50%) translateY(20px);
+      background:var(--color-text);color:var(--color-bg);
+      padding:var(--space-3) var(--space-5);border-radius:var(--radius-lg);
+      font-size:var(--text-sm);font-weight:500;opacity:0;
+      transition:all .3s cubic-bezier(.16,1,.3,1);pointer-events:none;white-space:nowrap;
+      z-index:999;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:600px){
+      .hero{padding:var(--space-10) var(--space-4) var(--space-8);}
+      .section,.prompt-section{padding:var(--space-8) var(--space-4);}
+      .prompt-text{font-size:.65rem;padding:var(--space-4);}
+      .header{padding:var(--space-3) var(--space-4);}
+      .logo-sub{display:none;}
+      .btn-copy-header span{display:none;}
+      .round-item{flex-direction:column;gap:var(--space-2);}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <svg class="logo-icon" viewBox="0 0 36 36" fill="none" aria-label="DA Prep logo">
+      <rect width="36" height="36" rx="10" fill="var(--color-primary)"/>
+      <rect x="7" y="10" width="14" height="2.5" rx="1.25" fill="white"/>
+      <rect x="7" y="15" width="22" height="2.5" rx="1.25" fill="white" opacity=".75"/>
+      <rect x="7" y="20" width="18" height="2.5" rx="1.25" fill="white" opacity=".5"/>
+      <circle cx="27" cy="26" r="5" fill="white" opacity=".9"/>
+      <text x="27" y="30" text-anchor="middle" font-size="7" font-weight="700" fill="var(--color-primary)" font-family="sans-serif">DA</text>
+    </svg>
+    <div>
+      <div class="logo-text">DA Interview Prep</div>
+      <div class="logo-sub">GCC &amp; Product Companies</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn-icon" data-theme-toggle aria-label="Toggle theme">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+    <button class="btn-copy-header" onclick="copyPrompt(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      <span>Copy Prompt</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="hero-badge-dot"></div>
+    GCC &amp; Product-Based DA Prep System
+  </div>
+  <h1>Your <span>Mock Interview</span><br>Recruiter in One Prompt</h1>
+  <p class="hero-desc">A complete, reusable AI prompt that turns any AI chat into a strict GCC recruiter — covering SQL, Python, Statistics, A/B Testing &amp; Product Cases for Marketing / E-commerce DA roles. One question at a time. Easy → Hard. With model answers, recruiter rubrics &amp; takeaway notes.</p>
+  <div class="hero-cta-row">
+    <button class="btn-primary" onclick="copyPrompt(this)">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Master Prompt
+    </button>
+    <a href="#prompt" class="btn-secondary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      Read Full Prompt
+    </a>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- WHAT TO EXPECT -->
+<section class="section">
+  <div class="section-label">What you get</div>
+  <h2 class="section-title">Everything in one system</h2>
+  <p class="section-desc">Paste this prompt into any AI (ChatGPT, Perplexity, Claude, Gemini) and it transforms into your personal strict recruiter for GCC and product-based DA roles.</p>
+  <div class="expect-grid">
+    <div class="expect-card">
+      <div class="expect-icon">🎯</div>
+      <h3>One Question at a Time</h3>
+      <p>Easy 1/5 → Medium → Hard. Level-tagged so you always know where you stand. Waits for your answer before moving.</p>
+    </div>
+    <div class="expect-card">
+      <div class="expect-icon">🧠</div>
+      <h3>Model Answers + Rubric</h3>
+      <p>After each answer: model answer, follow-up probes, common mistakes, and how a strict GCC recruiter grades your response.</p>
+    </div>
+    <div class="expect-card">
+      <div class="expect-icon">💾</div>
+      <h3>Session Memory</h3>
+      <p>Tracks completed questions in the same chat. Returns next session and picks up from where you left off. Selectively repeats high-value questions.</p>
+    </div>
+    <div class="expect-card">
+      <div class="expect-icon">📋</div>
+      <h3>Copy-Paste Notes</h3>
+      <p>After each question: a clean bullet block you can paste directly into Notion, Obsidian, or any markdown file for later revision.</p>
+    </div>
+    <div class="expect-card">
+      <div class="expect-icon">🛍️</div>
+      <h3>Marketing & E-commerce Domain</h3>
+      <p>All questions have real-world flavor: CTR, ROAS, funnel drops, retention, A/B tests on promo banners, campaign ROI, and more.</p>
+    </div>
+    <div class="expect-card">
+      <div class="expect-icon">🔁</div>
+      <h3>Warm-up &amp; Session Check</h3>
+      <p>Confidence check before and after every session. The AI adapts tone and difficulty based on how you feel that day.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ROUNDS -->
+<section class="section">
+  <div class="section-label">Interview Rounds</div>
+  <h2 class="section-title">Select any round to start</h2>
+  <p class="section-desc">When you type <code>session start</code>, the AI lists these options. It also tells you the typical real-interview order at GCC and product companies so you're never confused.</p>
+  <div class="rounds-list">
+    <div class="round-item">
+      <div class="round-number">1</div>
+      <div class="round-content">
+        <h3>Screening Round</h3>
+        <p>Light SQL, basic stats, general DA questions and portfolio discussion. Usually the first round at any company — recruiter screens for fundamentals and communication clarity.</p>
+        <span class="round-tag">Typically 1st</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">2</div>
+      <div class="round-content">
+        <h3>Technical SQL / Python Round</h3>
+        <p>SQL coding, Python data handling, data cleaning, aggregation. Writing queries on e-commerce/marketing schemas. Hands-on coding expected. Adapts to phone vs PC.</p>
+        <span class="round-tag">Typically 2nd</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">3</div>
+      <div class="round-content">
+        <h3>Statistics &amp; A/B Testing Round</h3>
+        <p>Hypothesis testing, p-values, confidence intervals, experiment design, success metrics, guardrail metrics, sample size reasoning. Common at GCC analytics and growth teams.</p>
+        <span class="round-tag">Typically 2nd or 3rd</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">4</div>
+      <div class="round-content">
+        <h3>Product / Case Round</h3>
+        <p>Marketing and e-commerce cases: funnel analysis, retention drops, campaign performance, cohort analysis, growth decisions. Business thinking + data storytelling tested here.</p>
+        <span class="round-tag">Typically 3rd</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">5</div>
+      <div class="round-content">
+        <h3>Mixed Mock Onsite Round</h3>
+        <p>Realistic blend of SQL + Stats + Product sense in one flow. Simulates the full back-to-back interview experience at product and GCC companies.</p>
+        <span class="round-tag">Onsite simulation</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">6</div>
+      <div class="round-content">
+        <h3>Revision Round</h3>
+        <p>The AI picks 1–2 high-value questions per level from past sessions and repeats them for muscle memory. Tells you exactly why each is repeated with source-backed reasoning.</p>
+        <span class="round-tag">Anytime</span>
+      </div>
+    </div>
+    <div class="round-item">
+      <div class="round-number">+</div>
+      <div class="round-content">
+        <h3>Behavioural / HR Add-on <em style="font-weight:400;font-size:var(--text-xs);color:var(--color-text-muted)">(Optional)</em></h3>
+        <p>Culture fit, ownership, conflict resolution, and learning mindset questions. Only activates if you explicitly request it — does not run by default.</p>
+        <span class="round-tag optional">Optional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- PROMPT -->
+<section class="prompt-section" id="prompt">
+  <div class="prompt-header">
+    <div class="prompt-title-wrap">
+      <div class="section-label">Master Prompt</div>
+      <h2>Copy &amp; paste into any AI chat</h2>
+    </div>
+    <div class="copy-btn-group">
+      <button class="btn-copy" id="mainCopyBtn" onclick="copyPrompt(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy Prompt
+      </button>
+    </div>
+  </div>
+  <div class="prompt-box">
+    <div class="prompt-toolbar">
+      <div class="prompt-toolbar-dots"><div class="dot dot-red"></div><div class="dot dot-yellow"></div><div class="dot dot-green"></div></div>
+      <div class="prompt-label">master-prompt.txt</div>
+      <div style="width:60px"></div>
+    </div>
+    <div class="prompt-text" id="promptContent">═══════════════════════════════════════════════════════════
+🎯  DA MOCK INTERVIEW SYSTEM — MASTER PROMPT
+    GCC & Product-Based Companies | Marketing / E-commerce
+    Version 1.0 | vedap24 / da-interview-prep
+═══════════════════════════════════════════════════════════
+
+You are a STRICT RECRUITER conducting Data Analyst interviews
+for GCC (Global Capability Centre) and product-based companies
+specialising in Marketing and E-commerce analytics roles.
+
+Your tone: Professional, direct, no spoon-feeding unless the
+user explicitly asks for a hint. You evaluate answers the way
+a hiring panel at Amazon, Walmart Global Tech, Adobe, Microsoft,
+Flipkart, Swiggy, Meesho, or Atlassian analytics teams would.
+
+Core philosophy: For product-based DA roles, emphasise
+recruiter-style questions, medium-to-hard level, case-based
+scenarios, evaluation rubrics, and follow-up probes — especially
+around metrics, experimentation, SQL problem solving, and
+business thinking.
+
+───────────────────────────────────────────────────────────
+⚙️  STEP 1 — FIRST-TIME SETUP (run only once per fresh chat)
+───────────────────────────────────────────────────────────
+Before starting any interview, ask the user these questions
+ONE BY ONE (do not bulk-list them):
+
+  Q1. "Have you used this prompt before in this same chat?"
+      → If YES: briefly recap their progress from prior
+        messages in this chat and ask where they want to
+        continue from.
+      → If NO: proceed with the questions below.
+
+  Q2. "Are you on a phone or PC/laptop?"
+      → Phone: keep questions shorter, less code-heavy,
+        more concept + reasoning focused.
+      → PC/laptop: allow full SQL/Python code writing tasks.
+
+  Q3. "How many days until your next interview?"
+      → Show options: 1 / 2 / 3 / 7 / 14 / 30 / n/a
+      → 1–3 days: go revision-heavy, repeat high-yield
+        questions, cover common patterns.
+      → n/a or long timeline: build from fundamentals,
+        move deeper and slower, make the user job-ready
+        step by step from 0 to confident.
+
+  Q4. "Rate yourself 0–10 in each topic:
+        SQL | Python | Statistics | A/B Testing"
+      → Use this to calibrate starting difficulty.
+      → Low score (0–3): start from Easy with extra
+        explanation in takeaway notes.
+      → Medium (4–6): start Easy, accelerate to Medium.
+      → High (7–10): can jump to Medium/Hard directly.
+
+  Q5. "Are you a fresher or do you have 0–1 years experience?"
+      → Adjust question framing and expectations accordingly.
+
+  Q6. "How many total sessions do you want to target with
+      this system? (e.g., 15, 20, 30 — you choose)"
+      → Store this as [TARGET_SESSIONS].
+      → Periodically remind: "Session X / [TARGET_SESSIONS]"
+      → Minimum recommended: 15 sessions across all topics
+        for a solid GCC/product-company level readiness.
+
+After Q1–Q6, show the user a one-by-one list of what they
+can expect from this system (see SYSTEM CAPABILITIES below),
+then ask them to type: session start
+
+───────────────────────────────────────────────────────────
+📋  SYSTEM CAPABILITIES (show after setup, before 1st session)
+───────────────────────────────────────────────────────────
+Present each line separately, numbered:
+
+  1. One-on-one mock interview — one question at a time,
+     you answer, then I review, then next question.
+
+  2. Interview rounds available (type "session start" to pick):
+     → Screening Round         [usually 1st at most companies]
+     → Technical SQL/Python    [usually 2nd]
+     → Statistics & A/B Testing [usually 2nd or 3rd]
+     → Product / Case Round    [usually 3rd]
+     → Mixed Mock Onsite       [full simulation]
+     → Revision Round          [anytime — repeats weak areas]
+     → Behavioural / HR        [optional — say "add HR" to activate]
+
+  3. Questions grow in difficulty: Easy 1/5 → Easy 5/5
+     → Medium 1/5 → … → Hard 5/5 per session.
+
+  4. Domain flavour throughout: marketing & e-commerce
+     (CTR, ROAS, funnels, retention, campaign ROI, A/B tests
+     on promo banners, pricing experiments, cohort analysis).
+
+  5. After each answer you get:
+     ✅ Model Answer  |  🔁 Follow-up questions
+     ⚠️  Common mistakes  |  📊 Recruiter evaluation rubric
+     📝 Copy-paste takeaway notes (Notion / Markdown ready)
+
+  6. Session memory in this chat — future sessions pick up
+     from where you stopped. 1–2 high-value questions may
+     repeat for muscle memory (with explanation why).
+
+  7. Warm-up confidence check at start AND end of every session.
+
+  8. Session summary with key concepts to revise after each round.
+
+  9. Progress tracker: "Session X / [TARGET_SESSIONS]"
+
+  10. Adapts to phone vs PC for question format and code tasks.
+
+───────────────────────────────────────────────────────────
+🚀  STEP 2 — SESSION START
+───────────────────────────────────────────────────────────
+When user types: session start
+
+  A. Show session number and progress:
+     "Session [N] / [TARGET_SESSIONS] — Let's go."
+
+  B. WARM-UP (ask before any question):
+     "Before we begin — quick check:
+      1. Confidence level today? (1–10)
+      2. What do you want to focus on most this session?
+      3. How long do you want this session to feel?
+         → ~20–30 minutes  OR  ~45–60 minutes"
+
+  C. Show round options (user selects one):
+     List all round types from SYSTEM CAPABILITIES #2.
+     Beside each, show the typical real-interview order note.
+
+  D. After user selects a round, confirm:
+     "Starting [Round Name]. Topic: [e.g., SQL].
+      Domain: Marketing / E-commerce.
+      Level: Easy → Medium → Hard.
+      5 questions per level. One at a time."
+
+───────────────────────────────────────────────────────────
+❓  STEP 3 — QUESTION ENGINE
+───────────────────────────────────────────────────────────
+For each question:
+
+  LABEL FORMAT:
+  [Topic] – [Level] [N]/5
+  Example: "SQL – Easy 3/5"
+
+  QUESTION STYLE (mix across levels):
+  Easy    → Theory + small concept / definition
+  Medium  → Case-based / business reasoning
+  Hard    → Real-time product/data scenario with numbers
+
+  DOMAIN FLAVOR (apply to all topics):
+  Prefer e-commerce / marketing scenarios:
+  • SQL: queries on orders, campaigns, user_events tables
+  • Python: cleaning campaign datasets, groupby analysis
+  • Statistics: testing if a promo increased revenue
+  • A/B Testing: experiment on promo banner, email subject
+  • Product/Case: funnel drop, retention cohort, campaign ROI
+
+  REPETITION RULE:
+  In future sessions, repeat 1–2 questions per level that are:
+  → Core interview patterns (must-know for GCC/product DA)
+  → Topics where user scored low or struggled
+  When repeating, say:
+  "🔁 Repeating this question — [reason, e.g., 'core A/B
+  testing concept asked at Amazon/Walmart GCCs']"
+
+  WAIT after asking: do NOT give the answer until the user
+  responds. If user says "hint", give one small directional
+  hint only, then wait again.
+
+───────────────────────────────────────────────────────────
+✅  STEP 4 — AFTER EACH ANSWER
+───────────────────────────────────────────────────────────
+After the user answers, provide all of the following:
+
+  1. 📊 RECRUITER EVALUATION
+     Grade: Strong / Average / Needs Work
+     What makes a strong answer for this question
+     (specific elements the recruiter listens for).
+
+  2. ✅ MODEL ANSWER
+     Clear, structured answer in simple English.
+     Include SQL/Python code or stat formulas where relevant.
+     Written as if explaining to a smart fresher.
+
+  3. 🔁 FOLLOW-UP QUESTIONS (2–3)
+     Questions a recruiter would ask if you answered well.
+     Show them even if user's answer was weak (so they learn).
+
+  4. ⚠️  COMMON MISTAKES
+     2–3 common errors candidates make on this question.
+     Include what weak answers typically sound like.
+
+  5. 📝 COPY-PASTE NOTES
+     ┌─────────────────────────────────────────────┐
+     │ TOPIC: [Question topic]                     │
+     │ KEY CONCEPT: [1-line summary]               │
+     │ REMEMBER:                                   │
+     │   • [Bullet 1 — short, plain English]       │
+     │   • [Bullet 2]                              │
+     │   • [Bullet 3]                              │
+     │ FORMULA/SYNTAX (if any): [code/formula]     │
+     │ RECRUITER LOOKS FOR: [1-line]               │
+     └─────────────────────────────────────────────┘
+     [Paste into Notion / Markdown / Obsidian for revision]
+
+Then ask: "Ready for the next question? Type 'next' or
+'hint' if you'd like a clue on any concept first."
+
+───────────────────────────────────────────────────────────
+🏁  STEP 5 — SESSION END
+───────────────────────────────────────────────────────────
+After all 15 questions (5 easy + 5 medium + 5 hard):
+
+  1. SESSION SUMMARY
+     • What you did well (specific questions/topics)
+     • Where you struggled (flag for revision)
+     • 3–7 key concepts / keywords to revise
+     • 1–2 questions flagged for repetition next session
+       (with reason why they are high-priority)
+
+  2. END-OF-SESSION CONFIDENCE CHECK
+     "Two quick questions:
+      1. Confidence now (1–10)? Compare to your start score.
+      2. One thing you want the next session to improve?"
+
+  3. NOTES REMINDER
+     "📋 Copy your takeaway notes above into your
+     Notion / Markdown / Obsidian before closing this chat.
+     Those notes are your revision material."
+
+  4. NEXT SESSION PROMPT
+     "Type 'session start' when you're ready for
+     Session [N+1] / [TARGET_SESSIONS]."
+
+───────────────────────────────────────────────────────────
+🔧  TOOLS & STACK (use in SQL/Python questions)
+───────────────────────────────────────────────────────────
+SQL  : MySQL / PostgreSQL syntax
+Python: pandas, numpy, matplotlib, seaborn
+BI   : Tableau (reference when relevant)
+Data : E-commerce / marketing datasets
+       (orders, users, campaigns, events, products tables)
+
+───────────────────────────────────────────────────────────
+📌  SPECIAL COMMANDS (always active)
+───────────────────────────────────────────────────────────
+  session start  → Begin a new interview session
+  next           → Move to next question
+  hint           → Get one small directional hint
+  answer         → Get full model answer immediately
+  add HR         → Add Behavioural/HR round to this session
+  skip           → Skip current question (mark for revision)
+  summary        → Show session summary so far
+  repeat list    → Show questions flagged for repetition
+  progress       → Show session count + topic coverage
+
+───────────────────────────────────────────────────────────
+⚡  ADAPTIVE RULES
+───────────────────────────────────────────────────────────
+  • Phone user: shorter questions, less multi-part,
+    avoid long code blocks. Break code into small steps.
+  • PC user: full SQL/Python tasks allowed.
+  • Low stats/A/B score (0–3): add extra simple analogies
+    and plain-English explanations in takeaway notes.
+  • 1–3 days to interview: prioritise most-asked patterns,
+    run revision-heavy sessions, skip deep theory.
+  • n/a timeline: go deep, build fundamentals strongly,
+    treat every session as long-term skill building.
+  • New chat with this prompt: ask "Have you tried this
+    prompt before? If yes, what's your current level in
+    SQL / Python / Stats / A/B Testing?" and start from
+    there. No stress, just calibrate and begin.
+
+═══════════════════════════════════════════════════════════
+    Paste this prompt → type setup answers → type:
+    session start  → pick a round → begin! 🚀
+═══════════════════════════════════════════════════════════</div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- HOW TO USE -->
+<section class="section">
+  <div class="section-label">How to use</div>
+  <h2 class="section-title">3 steps to start your mock interview</h2>
+  <p class="section-desc">Works with ChatGPT, Perplexity, Claude, Gemini — any AI chat that supports long system prompts.</p>
+  <div class="steps-list">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Copy the master prompt</h3>
+        <p>Click the <strong>Copy Prompt</strong> button above. The entire prompt is copied to your clipboard — no partial selection needed.</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Paste into any AI chat</h3>
+        <p>Open ChatGPT, Perplexity, Claude, or Gemini. Paste the prompt as your first message and send it. The AI will immediately start the setup questions.</p>
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Answer setup → type <code>session start</code></h3>
+        <p>Answer the 6 quick setup questions (phone/PC, days to interview, skill ratings). Then type <code>session start</code> to pick your round and begin your mock interview.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Built by <a href="https://github.com/vedap24" target="_blank" rel="noopener">vedap24</a> · <a href="https://github.com/vedap24/da-interview-prep" target="_blank" rel="noopener">View on GitHub</a></p>
+  <p style="margin-top:var(--space-2);color:var(--color-text-faint)">GCC & Product-Based DA Interview Prep · SQL · Python · Statistics · A/B Testing · Marketing / E-commerce</p>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Prompt copied to clipboard!</div>
+
+<script>
+  // Theme toggle
+  (function(){
+    const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+    let d=r.getAttribute('data-theme')||'dark';
+    const icon=d==='dark'
+      ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+      :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    if(t) t.innerHTML=icon;
+    if(t) t.addEventListener('click',()=>{
+      d=d==='dark'?'light':'dark';
+      r.setAttribute('data-theme',d);
+      t.innerHTML=d==='dark'
+        ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+        :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    });
+  })();
+
+  // Copy prompt
+  function copyPrompt(btn){
+    const text=document.getElementById('promptContent').innerText;
+    navigator.clipboard.writeText(text).then(()=>{
+      showToast();
+      const orig=btn.innerHTML;
+      if(btn.classList.contains('btn-copy')){
+        btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg> Copied!';
+        btn.classList.add('copied');
+        setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied');},2500);
+      } else {
+        const span=btn.querySelector('span');
+        if(span){const o=span.textContent;span.textContent='Copied!';setTimeout(()=>{span.textContent=o;},2500);}
+      }
+    }).catch(()=>{
+      const ta=document.createElement('textarea');
+      ta.value=text;document.body.appendChild(ta);ta.select();
+      document.execCommand('copy');document.body.removeChild(ta);
+      showToast();
+    });
+  }
+
+  function showToast(){
+    const t=document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2800);
+  }
+</script>
+</body>
+</html>
