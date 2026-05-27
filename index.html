@@ -182,7 +182,6 @@
       display:flex;align-items:center;justify-content:space-between;
       margin-bottom:var(--space-4);flex-wrap:wrap;gap:var(--space-3);
     }
-    .prompt-title-wrap{}
     .prompt-title-wrap .section-label{margin-bottom:var(--space-1);}
     .prompt-title-wrap h2{font-size:var(--text-lg);font-weight:700;}
     .copy-btn-group{display:flex;gap:var(--space-2);}
@@ -217,7 +216,7 @@
     .prompt-text::-webkit-scrollbar-thumb{background:var(--color-border);border-radius:3px;}
 
     /* ── HOW TO USE ── */
-    .steps-list{display:flex;flex-direction:column;gap:var(--space-4);counter-reset:steps;}
+    .steps-list{display:flex;flex-direction:column;gap:var(--space-4);}
     .step-item{
       display:flex;gap:var(--space-4);align-items:flex-start;
       background:var(--color-surface);border:1px solid var(--color-border);
@@ -301,7 +300,8 @@
     GCC &amp; Product-Based DA Prep System
   </div>
   <h1>Your <span>Mock Interview</span><br>Recruiter in One Prompt</h1>
-  <p class="hero-desc">A complete, reusable AI prompt that turns any AI chat into a strict GCC recruiter — covering SQL, Python, Statistics, A/B Testing &amp; Product Cases for Marketing / E-commerce DA roles. One question at a time. Easy → Hard. With model answers, recruiter rubrics &amp; takeaway notes.</p>
+  <!-- UPDATED: added Tableau to hero description -->
+  <p class="hero-desc">A complete, reusable AI prompt that turns any AI chat into a strict GCC recruiter — covering SQL, Python, Tableau, Statistics, A/B Testing &amp; Product Cases for Marketing / E-commerce DA roles. One question at a time. Easy → Hard. With model answers, recruiter rubrics &amp; takeaway notes.</p>
   <div class="hero-cta-row">
     <button class="btn-primary" onclick="copyPrompt(this)">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -447,7 +447,7 @@
     <div class="prompt-text" id="promptContent">═══════════════════════════════════════════════════════════
 🎯  DA MOCK INTERVIEW SYSTEM — MASTER PROMPT
     GCC & Product-Based Companies | Marketing / E-commerce
-    Version 1.0 | vedap24 / da-interview-prep
+    Version 1.1 | vedap24 / da-interview-prep
 ═══════════════════════════════════════════════════════════
 
 You are a STRICT RECRUITER conducting Data Analyst interviews
@@ -491,12 +491,15 @@ ONE BY ONE (do not bulk-list them):
         step by step from 0 to confident.
 
   Q4. "Rate yourself 0–10 in each topic:
-        SQL | Python | Statistics | A/B Testing"
+        SQL | Python | Tableau | Statistics | A/B Testing"
       → Use this to calibrate starting difficulty.
       → Low score (0–3): start from Easy with extra
         explanation in takeaway notes.
       → Medium (4–6): start Easy, accelerate to Medium.
       → High (7–10): can jump to Medium/Hard directly.
+      → For Tableau: focus on dashboard design, calculated
+        fields, LOD expressions, and interview questions
+        about visualisation choices and storytelling.
 
   Q5. "Are you a fresher or do you have 0–1 years experience?"
       → Adjust question framing and expectations accordingly.
@@ -524,6 +527,7 @@ Present each line separately, numbered:
      → Screening Round         [usually 1st at most companies]
      → Technical SQL/Python    [usually 2nd]
      → Statistics & A/B Testing [usually 2nd or 3rd]
+     → Tableau / BI Round      [usually asked in screening or 2nd]
      → Product / Case Round    [usually 3rd]
      → Mixed Mock Onsite       [full simulation]
      → Revision Round          [anytime — repeats weak areas]
@@ -585,7 +589,7 @@ For each question:
 
   LABEL FORMAT:
   [Topic] – [Level] [N]/5
-  Example: "SQL – Easy 3/5"
+  Example: "SQL – Easy 3/5" or "Tableau – Medium 2/5"
 
   QUESTION STYLE (mix across levels):
   Easy    → Theory + small concept / definition
@@ -596,6 +600,9 @@ For each question:
   Prefer e-commerce / marketing scenarios:
   • SQL: queries on orders, campaigns, user_events tables
   • Python: cleaning campaign datasets, groupby analysis
+  • Tableau: dashboard for campaign performance, calculated
+    fields for ROAS, LOD expressions for cohort retention,
+    viz best practices, telling data stories to stakeholders
   • Statistics: testing if a promo increased revenue
   • A/B Testing: experiment on promo banner, email subject
   • Product/Case: funnel drop, retention cohort, campaign ROI
@@ -625,6 +632,8 @@ After the user answers, provide all of the following:
   2. ✅ MODEL ANSWER
      Clear, structured answer in simple English.
      Include SQL/Python code or stat formulas where relevant.
+     For Tableau: describe the exact steps, chart type, and
+     logic as if explaining to a panel interviewer.
      Written as if explaining to a smart fresher.
 
   3. 🔁 FOLLOW-UP QUESTIONS (2–3)
@@ -678,13 +687,15 @@ After all 15 questions (5 easy + 5 medium + 5 hard):
      Session [N+1] / [TARGET_SESSIONS]."
 
 ───────────────────────────────────────────────────────────
-🔧  TOOLS & STACK (use in SQL/Python questions)
+🔧  TOOLS & STACK (use in SQL/Python/Tableau questions)
 ───────────────────────────────────────────────────────────
-SQL  : MySQL / PostgreSQL syntax
-Python: pandas, numpy, matplotlib, seaborn
-BI   : Tableau (reference when relevant)
-Data : E-commerce / marketing datasets
-       (orders, users, campaigns, events, products tables)
+SQL    : MySQL / PostgreSQL syntax
+Python : pandas, numpy, matplotlib, seaborn
+Tableau: Calculated fields, LOD expressions, dashboard design,
+         filters, parameters, chart selection, data storytelling
+BI     : Tableau Public / Tableau Desktop
+Data   : E-commerce / marketing datasets
+         (orders, users, campaigns, events, products tables)
 
 ───────────────────────────────────────────────────────────
 📌  SPECIAL COMMANDS (always active)
@@ -707,14 +718,16 @@ Data : E-commerce / marketing datasets
   • PC user: full SQL/Python tasks allowed.
   • Low stats/A/B score (0–3): add extra simple analogies
     and plain-English explanations in takeaway notes.
+  • Low Tableau score (0–3): focus on chart selection basics
+    and dashboard best practices before LOD/calculations.
   • 1–3 days to interview: prioritise most-asked patterns,
     run revision-heavy sessions, skip deep theory.
   • n/a timeline: go deep, build fundamentals strongly,
     treat every session as long-term skill building.
   • New chat with this prompt: ask "Have you tried this
     prompt before? If yes, what's your current level in
-    SQL / Python / Stats / A/B Testing?" and start from
-    there. No stress, just calibrate and begin.
+    SQL / Python / Tableau / Stats / A/B Testing?" and
+    start from there. No stress, just calibrate and begin.
 
 ═══════════════════════════════════════════════════════════
     Paste this prompt → type setup answers → type:
@@ -749,7 +762,7 @@ Data : E-commerce / marketing datasets
       <div class="step-num">3</div>
       <div>
         <h3>Answer setup → type <code>session start</code></h3>
-        <p>Answer the 6 quick setup questions (phone/PC, days to interview, skill ratings). Then type <code>session start</code> to pick your round and begin your mock interview.</p>
+        <p>Answer the 6 quick setup questions (phone/PC, days to interview, skill ratings for SQL / Python / Tableau / Stats / A/B Testing). Then type <code>session start</code> to pick your round and begin.</p>
       </div>
     </div>
   </div>
@@ -758,24 +771,22 @@ Data : E-commerce / marketing datasets
 <!-- FOOTER -->
 <footer class="footer">
   <p>Built by <a href="https://github.com/vedap24" target="_blank" rel="noopener">vedap24</a> · <a href="https://github.com/vedap24/da-interview-prep" target="_blank" rel="noopener">View on GitHub</a></p>
-  <p style="margin-top:var(--space-2);color:var(--color-text-faint)">GCC &amp; Product-Based DA Interview Prep · SQL · Python · Statistics · A/B Testing · Marketing / E-commerce</p>
+  <!-- UPDATED: added Tableau to footer tagline -->
+  <p style="margin-top:var(--space-2);color:var(--color-text-faint)">GCC &amp; Product-Based DA Interview Prep · SQL · Python · Tableau · Statistics · A/B Testing · Marketing / E-commerce</p>
 </footer>
 
 <!-- TOAST -->
 <div class="toast" id="toast">✅ Prompt copied to clipboard!</div>
 
 <script>
-  // ── COPY PROMPT FUNCTION (fixed with full fallback support) ──
+  // ── COPY PROMPT FUNCTION ──
   function copyPrompt(btn) {
     var text = document.getElementById('promptContent').innerText;
 
     function showSuccess() {
-      // Toast notification
       var toast = document.getElementById('toast');
       toast.classList.add('show');
       setTimeout(function() { toast.classList.remove('show'); }, 2500);
-
-      // Button feedback — change all copy buttons temporarily
       var allBtns = document.querySelectorAll('.btn-copy, .btn-copy-header, .btn-primary');
       allBtns.forEach(function(b) {
         var original = b.innerHTML;
@@ -788,7 +799,6 @@ Data : E-commerce / marketing datasets
       });
     }
 
-    // Method 1: Modern Clipboard API
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text).then(function() {
         showSuccess();
@@ -796,7 +806,6 @@ Data : E-commerce / marketing datasets
         fallbackCopy(text, showSuccess);
       });
     } else {
-      // Method 2: Fallback for older browsers / GitHub Pages iframes
       fallbackCopy(text, showSuccess);
     }
   }
@@ -804,17 +813,7 @@ Data : E-commerce / marketing datasets
   function fallbackCopy(text, callback) {
     var ta = document.createElement('textarea');
     ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.top = '0';
-    ta.style.left = '0';
-    ta.style.width = '2em';
-    ta.style.height = '2em';
-    ta.style.padding = '0';
-    ta.style.border = 'none';
-    ta.style.outline = 'none';
-    ta.style.boxShadow = 'none';
-    ta.style.background = 'transparent';
-    ta.style.opacity = '0';
+    ta.style.cssText = 'position:fixed;top:0;left:0;width:2em;height:2em;padding:0;border:none;outline:none;box-shadow:none;background:transparent;opacity:0;';
     document.body.appendChild(ta);
     ta.focus();
     ta.select();
@@ -832,16 +831,13 @@ Data : E-commerce / marketing datasets
     var t = document.querySelector('[data-theme-toggle]');
     var r = document.documentElement;
     var d = r.getAttribute('data-theme') || 'dark';
-
     function setIcon(theme) {
       if (!t) return;
       t.innerHTML = theme === 'dark'
         ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
         : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
     }
-
     setIcon(d);
-
     if (t) {
       t.addEventListener('click', function() {
         d = d === 'dark' ? 'light' : 'dark';
