@@ -344,7 +344,7 @@
     </div>
     <div class="expect-card">
       <div class="expect-icon">🛍️</div>
-      <h3>Marketing & E-commerce Domain</h3>
+      <h3>Marketing &amp; E-commerce Domain</h3>
       <p>All questions have real-world flavor: CTR, ROAS, funnel drops, retention, A/B tests on promo banners, campaign ROI, and more.</p>
     </div>
     <div class="expect-card">
@@ -758,57 +758,98 @@ Data : E-commerce / marketing datasets
 <!-- FOOTER -->
 <footer class="footer">
   <p>Built by <a href="https://github.com/vedap24" target="_blank" rel="noopener">vedap24</a> · <a href="https://github.com/vedap24/da-interview-prep" target="_blank" rel="noopener">View on GitHub</a></p>
-  <p style="margin-top:var(--space-2);color:var(--color-text-faint)">GCC & Product-Based DA Interview Prep · SQL · Python · Statistics · A/B Testing · Marketing / E-commerce</p>
+  <p style="margin-top:var(--space-2);color:var(--color-text-faint)">GCC &amp; Product-Based DA Interview Prep · SQL · Python · Statistics · A/B Testing · Marketing / E-commerce</p>
 </footer>
 
 <!-- TOAST -->
 <div class="toast" id="toast">✅ Prompt copied to clipboard!</div>
 
 <script>
-  // Theme toggle
-  (function(){
-    const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
-    let d=r.getAttribute('data-theme')||'dark';
-    const icon=d==='dark'
-      ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-      :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    if(t) t.innerHTML=icon;
-    if(t) t.addEventListener('click',()=>{
-      d=d==='dark'?'light':'dark';
-      r.setAttribute('data-theme',d);
-      t.innerHTML=d==='dark'
-        ?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
-        :'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
-    });
+  // ── COPY PROMPT FUNCTION (fixed with full fallback support) ──
+  function copyPrompt(btn) {
+    var text = document.getElementById('promptContent').innerText;
+
+    function showSuccess() {
+      // Toast notification
+      var toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(function() { toast.classList.remove('show'); }, 2500);
+
+      // Button feedback — change all copy buttons temporarily
+      var allBtns = document.querySelectorAll('.btn-copy, .btn-copy-header, .btn-primary');
+      allBtns.forEach(function(b) {
+        var original = b.innerHTML;
+        b.innerHTML = b.innerHTML.replace(/Copy.*?(Prompt|prompt)?/gi, '✅ Copied!');
+        b.classList.add('copied');
+        setTimeout(function() {
+          b.innerHTML = original;
+          b.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // Method 1: Modern Clipboard API
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function() {
+        showSuccess();
+      }).catch(function() {
+        fallbackCopy(text, showSuccess);
+      });
+    } else {
+      // Method 2: Fallback for older browsers / GitHub Pages iframes
+      fallbackCopy(text, showSuccess);
+    }
+  }
+
+  function fallbackCopy(text, callback) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '0';
+    ta.style.left = '0';
+    ta.style.width = '2em';
+    ta.style.height = '2em';
+    ta.style.padding = '0';
+    ta.style.border = 'none';
+    ta.style.outline = 'none';
+    ta.style.boxShadow = 'none';
+    ta.style.background = 'transparent';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      var ok = document.execCommand('copy');
+      if (ok && callback) callback();
+    } catch (e) {
+      alert('Copy failed. Please manually select and copy the text in the prompt box.');
+    }
+    document.body.removeChild(ta);
+  }
+
+  // ── THEME TOGGLE ──
+  (function() {
+    var t = document.querySelector('[data-theme-toggle]');
+    var r = document.documentElement;
+    var d = r.getAttribute('data-theme') || 'dark';
+
+    function setIcon(theme) {
+      if (!t) return;
+      t.innerHTML = theme === 'dark'
+        ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+        : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+    }
+
+    setIcon(d);
+
+    if (t) {
+      t.addEventListener('click', function() {
+        d = d === 'dark' ? 'light' : 'dark';
+        r.setAttribute('data-theme', d);
+        setIcon(d);
+      });
+    }
   })();
-
-  // Copy prompt
-  function copyPrompt(btn){
-    const text=document.getElementById('promptContent').innerText;
-    navigator.clipboard.writeText(text).then(()=>{
-      showToast();
-      const orig=btn.innerHTML;
-      if(btn.classList.contains('btn-copy')){
-        btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg> Copied!';
-        btn.classList.add('copied');
-        setTimeout(()=>{btn.innerHTML=orig;btn.classList.remove('copied');},2500);
-      } else {
-        const span=btn.querySelector('span');
-        if(span){const o=span.textContent;span.textContent='Copied!';setTimeout(()=>{span.textContent=o;},2500);}
-      }
-    }).catch(()=>{
-      const ta=document.createElement('textarea');
-      ta.value=text;document.body.appendChild(ta);ta.select();
-      document.execCommand('copy');document.body.removeChild(ta);
-      showToast();
-    });
-  }
-
-  function showToast(){
-    const t=document.getElementById('toast');
-    t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2800);
-  }
 </script>
 </body>
 </html>
